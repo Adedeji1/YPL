@@ -16,3 +16,4 @@ function useIsLargeScreen() {
 
   return isLarge;
 }
+export default useIsLargeScreen;

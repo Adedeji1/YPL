@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Check, Plus, Minus, ArrowRight, ArrowLeft } from 'lucide-react';
 import { toppingCategories, pizzaSizes, sauceOptions, cheeseOptions } from '../data';
 import { useCart } from '../cart-context';
 import { useNavigate } from 'react-router';
+import useIsLargeScreen from '../../../hooks/screenSize';
 
 interface PizzaConfig {
   size: 'small' | 'medium' | 'large' | null;
@@ -23,6 +24,8 @@ export function PizzaBuilder() {
   const [showUpsell, setShowUpsell] = useState(false);
   const { addItem } = useCart();
   const navigate = useNavigate();
+  // Render Annimations based on screen Size
+  const isLargeScreen = useIsLargeScreen();
 
   const calculatePrice = () => {
     let price = 0;
