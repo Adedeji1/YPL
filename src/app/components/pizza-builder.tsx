@@ -125,7 +125,7 @@ export function PizzaBuilder() {
             className="hidden lg:block top-24 text-center mb-6"
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-4">Build Your Pizza</h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-gray-500">
               Create your perfect pizza, just the way you like it
             </p>
           </motion.div>
