@@ -5,6 +5,8 @@ import { Menu } from "./components/menu";
 import { PizzaBuilder } from "./components/pizza-builder";
 import { Checkout } from "./components/checkout";
 import { Success } from "./components/success";
+import { About } from "./components/about";
+import { Contact } from "./components/contact";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +18,8 @@ export const router = createBrowserRouter([
       { path: "builder", Component: PizzaBuilder },
       { path: "checkout", Component: Checkout },
       { path: "success", Component: Success },
+      { path: "about", Component: About },
+      { path: "contact", Component: Contact }
     ],
   },
 ]);

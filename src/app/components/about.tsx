@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const About: React.FC = () => {
+export function About() {
   return (
     <div>
       <h1>About Us</h1>
