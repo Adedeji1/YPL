@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router';
 import { motion } from 'motion/react';
-import { ShoppingCart, Menu, Utensils, User, Sun, Moon } from 'lucide-react';
+import { ShoppingCart, Menu, Utensils, User, Sun, Moon, MessageCircle, Info, Contact } from 'lucide-react';
 import { useCart } from '../cart-context';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
@@ -125,7 +125,7 @@ export function Navigation() {
             </span>
           </Link> */}
           <Link to="/about" className="flex flex-col items-center gap-1">
-            <Utensils className={`w-6 h-6 ${isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
+            <Info className={`w-6 h-6 ${isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
             <span className={`text-xs ${isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
               About
             </span>
@@ -154,7 +154,7 @@ export function Navigation() {
             </span>
           </Link> */}
           <Link to="/contact" className="flex flex-col items-center gap-1">
-            <Utensils className={`w-6 h-6 ${isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
+            <Contact className={`w-6 h-6 ${isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
             <span className={`text-xs ${isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
               Contact
             </span>
