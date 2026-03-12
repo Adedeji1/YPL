@@ -42,7 +42,7 @@ export function Navigation() {
                 Home
               </Link>
               <Link
-                to="/menu"
+                to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"}
                 className={`hover:text-[#D32F2F] transition-colors ${
                   isActive('/menu') ? 'text-[#D32F2F]' : 'text-foreground'
                 }`}
