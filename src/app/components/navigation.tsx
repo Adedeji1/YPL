@@ -4,7 +4,6 @@ import { ShoppingCart, Menu, Utensils, User, Sun, Moon } from 'lucide-react';
 import { useCart } from '../cart-context';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-// import logo from 'figma:asset/f292385bbd6a4c200894072fb8e16a8b79437f81.png';
 import logo from './asset/Pizza-Logo.webp';
 
 export function Navigation() {
@@ -51,13 +50,29 @@ export function Navigation() {
                 Menu
               </Link>
               <Link
+                to="/about"
+                className={`hover:text-[#D32F2F] transition-colors ${
+                  isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'
+                }`}
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                className={`hover:text-[#D32F2F] transition-colors ${
+                  isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'
+                }`}
+              >
+                Contact
+              </Link>
+              {/* <Link
                 to="/builder"
                 className={`hover:text-[#D32F2F] transition-colors ${
                   isActive('/builder') ? 'text-[#D32F2F]' : 'text-foreground'
                 }`}
               >
                 Build Your Pizza
-              </Link>
+              </Link> */}
 
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -71,7 +86,7 @@ export function Navigation() {
                 )}
               </button>
 
-              <Link to="/checkout" className="relative">
+              {/* <Link to="/checkout" className="relative">
                 <motion.div
                   animate={animate ? { scale: [1, 1.2, 1] } : {}}
                   transition={{ duration: 0.3 }}
@@ -87,7 +102,7 @@ export function Navigation() {
                     </motion.span>
                   )}
                 </motion.div>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
