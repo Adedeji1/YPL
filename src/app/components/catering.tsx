@@ -1,0 +1,414 @@
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card";
+import { Badge } from "./ui/badge";
+import heroBg from "./asset/catering/heroBG.webp";
+import Cat1 from "./asset/catering/catering1.webp";
+import Cat2 from "./asset/catering/catering2.webp";
+import Cat3 from "./asset/catering/catering3.webp";
+import DeluxePack from "./asset/catering/deluxePack.webp";
+import PlusPack from "./asset/catering/plusPack.webp";
+import SuperPack from "./asset/catering/sperPack.webp";
+import BasicPack from "./asset/catering/basicPack.webp";
+
+// ── Types ──────────────────────────────────────────────────────────────────────
+interface PackageItem {
+  id: number;
+  slug: string; // ← matches the IDs used in CateringOrderForm
+  name: string;
+  badge?: string;
+  items: string[];
+  price: string;
+  image: string;
+}
+
+interface ExtraItem {
+  name: string;
+  price: string;
+}
+
+// ── Data ───────────────────────────────────────────────────────────────────────
+const PACKAGES: PackageItem[] = [
+  {
+    id: 1,
+    slug: "super-deluxe", // ← must match CateringOrderForm PACKAGES id
+    name: "Super Deluxe Party Pack",
+    badge: "Most Popular",
+    items: ["Pizzas (Two Toppings)", "Wings", "Subs", "Garden Salad", "Garlic Knots", "Coleslaw"],
+    price: "$10.99",
+    image: SuperPack,
+  },
+  {
+    id: 2,
+    slug: "deluxe-plus",
+    name: "Deluxe Plus Party Pack",
+    items: ["Pizzas (Two Toppings)", "Subs", "Garden Salad", "Garlic Knots"],
+    price: "$9.99",
+    image: PlusPack,
+  },
+  {
+    id: 3,
+    slug: "deluxe",
+    name: "Deluxe Party Pack",
+    items: ["Pizzas (Two Toppings)", "Garden Salad", "Garlic Knots"],
+    price: "$7.99",
+    image: DeluxePack,
+  },
+  {
+    id: 4,
+    slug: "basic",
+    name: "Basic Party Pack",
+    items: ["Marinara Spaghetti", "Garden Salad", "Garlic Knots"],
+    price: "$6.99",
+    image: BasicPack,
+  },
+];
+
+const EXTRAS: ExtraItem[] = [
+  { name: "Paper Pack (plates, forks, napkins)", price: "$0.50" },
+  { name: "50 Pieces Chicken", price: "$62.95" },
+  { name: "Chicken Tenders", price: "$2.25 / each" },
+  { name: "Half Tray Greek Salad", price: "$29.95" },
+  { name: "Half Tray Potato Salad or Cole Slaw", price: "$19.95" },
+  { name: "Drinks (2 Liter Coke, Diet, or Starry)", price: "$3.95" },
+  { name: "Half Pan Italian Spaghetti (serves 25)", price: "$24.95" },
+  { name: "Half Tray Lasagna (serves 25)", price: "$44.95" },
+];
+
+const EVENT_TYPES = [
+  "Weddings",
+  "Corporate Lunches",
+  "Birthday Parties",
+  "Receptions",
+  "Office Parties",
+  "Private Dinners",
+];
+
+// ── Hook: Intersection Observer ────────────────────────────────────────────────
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return { ref, visible };
+}
+
+// ── SectionLabel ───────────────────────────────────────────────────────────────
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2 text-red-600 text-xs font-bold tracking-[0.2em] uppercase mb-4">
+      {children}
+      <span className="w-7 h-px bg-red-600 inline-block" />
+    </span>
+  );
+}
+
+// ── PackageCard ────────────────────────────────────────────────────────────────
+function PackageCard({ pkg, delay }: { pkg: PackageItem; delay: number }) {
+  const navigate = useNavigate();
+  const { ref, visible } = useScrollReveal();
+
+  const handleOrder = () => {
+    // ✅ Use slug so CateringOrderForm can match it directly
+    navigate(`/catering/order?package=${pkg.slug}`);
+  };
+
+  return (
+    <div
+      ref={ref}
+      className="transition-all duration-700 ease-out"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(40px)",
+        transitionDelay: `${delay}ms`,
+      }}
+    >
+      <Card className="overflow-hidden border-0 rounded-none group hover:-translate-y-2 transition-transform duration-300 shadow-md h-full">
+        <div className="relative h-52 overflow-hidden">
+          <img
+            src={pkg.image}
+            alt={pkg.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          {pkg.badge && (
+            <Badge className="absolute top-3 left-3 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest uppercase rounded-none">
+              {pkg.badge}
+            </Badge>
+          )}
+        </div>
+
+        <CardContent className="p-6 flex flex-col flex-1">
+          <h3 className="font-serif text-xl font-bold text-stone-800 mb-4 leading-tight">
+            {pkg.name}
+          </h3>
+
+          <ul className="space-y-1 flex-1 mb-5">
+            {pkg.items.map((item) => (
+              <li
+                key={item}
+                className="flex items-center gap-2 text-sm text-stone-500 py-1.5 border-b border-stone-100"
+              >
+                <span className="text-amber-500 text-[10px]">✦</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <span className="font-serif text-2xl font-bold text-stone-800">
+                {pkg.price}
+              </span>
+              <span className="text-stone-400 text-xs ml-1">/ guest</span>
+            </div>
+
+            <Button
+              onClick={handleOrder}
+              className="rounded-none bg-red-600 hover:bg-red-700 text-[11px] tracking-widest uppercase transition-all duration-200 group/btn"
+            >
+              <span className="inline-flex items-center gap-1.5">
+                Order Now
+                <span className="translate-x-0 group-hover/btn:translate-x-1 transition-transform duration-200 inline-block">
+                  →
+                </span>
+              </span>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// ── Main Page ──────────────────────────────────────────────────────────────────
+export default function Catering() {
+  const introReveal = useScrollReveal();
+  const packReveal = useScrollReveal();
+  const extrasReveal = useScrollReveal();
+  const ctaReveal = useScrollReveal();
+
+  return (
+    <div className="min-h-screen bg-[#FAF6EE] font-sans">
+
+      {/* ── HERO ── */}
+      <section
+        className="relative h-screen min-h-[580px] flex items-center justify-center overflow-hidden"
+        style={{ paddingTop: "64px" }}
+      >
+        <div
+          className="absolute inset-0 animate-[zoomBg_18s_ease-in-out_infinite_alternate]"
+          style={{
+            backgroundImage: `linear-gradient(155deg, rgba(26,23,20,0.9), rgba(192,25,14,0.45)), url(${heroBg})`,
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+        <div className="relative text-center px-6 animate-[fadeUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both]">
+          <div className="inline-flex items-center gap-3 text-amber-400 text-[11px] font-bold tracking-[0.2em] uppercase mb-5">
+            <span className="w-8 h-px bg-amber-400/70" />
+            Catering &amp; Private Events
+            <span className="w-8 h-px bg-amber-400/70" />
+          </div>
+          <h1 className="font-serif text-5xl md:text-7xl font-black text-white leading-tight mb-3">
+            "<span className="text-amber-400 italic">Your</span>" Pizza Shop
+            <br />
+            <span className="text-4xl md:text-5xl font-bold">Largo</span>
+          </h1>
+          <p className="font-serif italic text-lg md:text-2xl text-white/65 mb-9">
+            Every event deserves a slice of perfection
+          </p>
+          <a
+            href="#packages"
+            className="inline-flex items-center gap-3 bg-red-600 hover:bg-red-800 text-white text-[11px] font-bold tracking-[0.15em] uppercase px-9 py-4 transition-all duration-200 hover:-translate-y-1 shadow-xl shadow-red-900/40"
+          >
+            View Catering Packages ↓
+          </a>
+        </div>
+      </section>
+
+      {/* ── INTRO ── */}
+      <section className="py-24 px-[5%]">
+        <div
+          ref={introReveal.ref}
+          className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto transition-all duration-700"
+          style={{
+            opacity: introReveal.visible ? 1 : 0,
+            transform: introReveal.visible ? "translateY(0)" : "translateY(40px)",
+          }}
+        >
+          <div>
+            <SectionLabel>Welcome</SectionLabel>
+            <h2 className="font-serif text-4xl md:text-5xl font-extrabold leading-tight text-stone-800 mb-5">
+              Elevate your{" "}
+              <em className="text-red-600 not-italic">moments</em> with us
+            </h2>
+            <p className="text-stone-500 leading-relaxed mb-4">
+              Welcome to "Your" Pizza Shop Largo Catering — where delicious moments meet exceptional
+              service. Elevate your events with handcrafted pizzas, mouthwatering appetizers, and
+              savory delights.
+            </p>
+            <p className="text-stone-500 leading-relaxed">
+              Whether it's a corporate gathering, a milestone celebration, or a casual get-together,
+              our catering services are tailored to make your occasions unforgettable.
+            </p>
+
+            <div className="grid grid-cols-2 gap-0.5 mt-8">
+              {[
+                { num: "4", label: "Party Packages" },
+                { num: "$6.99", label: "Starting Price / Guest" },
+                { num: "15+", label: "Add-on Items" },
+                { num: "∞", label: "Occasions Covered" },
+              ].map((s, i) => (
+                <div key={s.label} className={`p-7 ${i % 2 === 0 ? "bg-stone-900" : "bg-red-600"}`}>
+                  <div className="font-serif text-4xl font-black text-white">{s.num}</div>
+                  <div className="text-[11px] font-semibold tracking-widest uppercase text-white/55 mt-1">
+                    {s.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden md:grid grid-cols-2 grid-rows-2 gap-2 h-[440px]">
+            {[
+              { src: Cat1, span: "col-span-2" },
+              { src: Cat2, span: "" },
+              { src: Cat3, span: "" },
+            ].map((img) => (
+              <div key={img.src} className={`overflow-hidden ${img.span}`}>
+                <img
+                  src={img.src}
+                  alt=""
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PACKAGES ── */}
+      <section id="packages" className="py-24 px-[5%] bg-stone-900">
+        <div
+          ref={packReveal.ref}
+          className="text-center mb-16 transition-all duration-700"
+          style={{
+            opacity: packReveal.visible ? 1 : 0,
+            transform: packReveal.visible ? "translateY(0)" : "translateY(30px)",
+          }}
+        >
+          <span className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold tracking-[0.2em] uppercase mb-3">
+            Packages
+            <span className="w-7 h-px bg-amber-400/70 inline-block" />
+          </span>
+          <h2 className="font-serif text-4xl md:text-5xl font-extrabold text-white leading-tight">
+            Choose your{" "}
+            <em className="text-amber-400 not-italic">perfect pack</em>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0.5 max-w-7xl mx-auto">
+          {PACKAGES.map((pkg, i) => (
+            <PackageCard key={pkg.id} pkg={pkg} delay={i * 100} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── EXTRAS ── */}
+      <section className="py-24 px-[5%] bg-[#F4EBD9]">
+        <div className="max-w-5xl mx-auto">
+          <div
+            ref={extrasReveal.ref}
+            className="flex flex-wrap items-end justify-between gap-6 mb-12 transition-all duration-700"
+            style={{
+              opacity: extrasReveal.visible ? 1 : 0,
+              transform: extrasReveal.visible ? "translateY(0)" : "translateY(30px)",
+            }}
+          >
+            <div>
+              <SectionLabel>Add-ons</SectionLabel>
+              <h2 className="font-serif text-4xl font-extrabold text-stone-800 leading-tight">
+                Extra, <em className="text-red-600">extra!</em>
+              </h2>
+            </div>
+            <p className="text-stone-500 text-sm leading-relaxed max-w-xs">
+              Customize your order with these add-ons to take your event to the next level.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-px bg-stone-200">
+            {EXTRAS.map((extra) => (
+              <div
+                key={extra.name}
+                className="bg-[#FAF6EE] hover:bg-white flex items-center justify-between gap-4 px-6 py-5 transition-colors duration-200"
+              >
+                <span className="text-sm text-stone-700 font-medium">{extra.name}</span>
+                <span className="font-serif text-lg font-bold text-red-600 whitespace-nowrap">
+                  {extra.price}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="py-20 px-[5%] bg-red-600 text-center relative overflow-hidden">
+        <span className="absolute font-serif text-[18vw] font-black text-white/[0.04] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none whitespace-nowrap">
+          PIZZA
+        </span>
+        <div
+          ref={ctaReveal.ref}
+          className="relative transition-all duration-700"
+          style={{
+            opacity: ctaReveal.visible ? 1 : 0,
+            transform: ctaReveal.visible ? "translateY(0)" : "translateY(30px)",
+          }}
+        >
+          <h2 className="font-serif text-4xl md:text-5xl font-black text-white mb-3">
+            Ready to plan your event?
+          </h2>
+          <p className="text-white/75 text-base max-w-lg mx-auto mb-8 leading-relaxed">
+            Call us to place your order. Our restaurant is available for private events: weddings,
+            business lunches, birthday parties, and more!
+          </p>
+          <a
+            href="tel:7275811101"
+            className="font-serif text-3xl md:text-5xl font-bold text-white hover:opacity-80 transition-opacity"
+          >
+            📞 (727) 581-1101
+          </a>
+
+          <div className="flex flex-wrap gap-2.5 justify-center mt-8">
+            {EVENT_TYPES.map((tag) => (
+              <Badge
+                key={tag}
+                variant="outline"
+                className="bg-white/10 border-white/25 text-white hover:bg-white/20 text-[10px] tracking-widest uppercase rounded-full px-4 py-1.5 cursor-default"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
