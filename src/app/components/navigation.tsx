@@ -65,6 +65,14 @@ export function Navigation() {
               >
                 Contact
               </Link>
+               <Link
+                to="/catering"
+                className={`hover:text-[#D32F2F] transition-colors ${
+                  isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'
+                }`}
+              >
+                Catering
+              </Link>
               {/* <Link
                 to="/builder"
                 className={`hover:text-[#D32F2F] transition-colors ${
