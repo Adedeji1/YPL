@@ -4,9 +4,17 @@ import { Card, CardContent } from "./ui/card";
 import { Separator } from "./ui/separator";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
+import heroBg from "./asset/catering/heroBG.webp";
+import Cat1 from "./asset/catering/catering1.webp";
+import Cat2 from "./asset/catering/catering2.webp";
+import Cat3 from "./asset/catering/catering3.webp";
+import DeluxePack from "./asset/catering/deluxePack.webp";
+import PlusPack from "./asset/catering/plusPack.webp";
+import SuperPack from "./asset/catering/sperPack.webp";
+import BasicPack from "./asset/catering/basicPack.webp";
 
 
-// ── Types ───────────────────────────────────────────────
+// ── Types ──────
 interface PackageItem {
   id: number;
   name: string;
@@ -21,7 +29,7 @@ interface ExtraItem {
   price: string;
 }
 
-// ── Data ────────────────────────────────────────────────
+// ── Data 
 const PACKAGES: PackageItem[] = [
   {
     id: 1,
@@ -29,32 +37,28 @@ const PACKAGES: PackageItem[] = [
     badge: "Most Popular",
     items: ["Pizzas (Two Toppings)", "Wings", "Subs", "Garden Salad", "Garlic Knots", "Coleslaw"],
     price: "$10.99",
-    image:
-      "https://images.squarespace-cdn.com/content/v1/642512cfe04e46095ee8a5d1/8315c7b7-8ee1-456f-9a8a-edf031ef2b73/B0514B58-9C05-488D-B837-D5505D726B1E.jpeg",
+    image: SuperPack, 
   },
   {
     id: 2,
     name: "Deluxe Plus Party Pack",
     items: ["Pizzas (Two Toppings)", "Subs", "Garden Salad", "Garlic Knots"],
     price: "$9.99",
-    image:
-      "https://images.squarespace-cdn.com/content/v1/642512cfe04e46095ee8a5d1/6003f662-7213-4f1d-a06a-3c2cc29b056a/FE2AD04E-B213-4DF6-A55D-A2EADB3CF1CB.jpeg",
+    image: PlusPack,
   },
   {
     id: 3,
     name: "Deluxe Party Pack",
     items: ["Pizzas (Two Toppings)", "Garden Salad", "Garlic Knots"],
     price: "$7.99",
-    image:
-      "https://images.squarespace-cdn.com/content/v1/642512cfe04e46095ee8a5d1/7b16d928-89c5-485e-b1ec-f5eacee2dcf2/D96CF308-E943-4207-8148-B677B710C769.jpeg",
+    image: DeluxePack,
   },
   {
     id: 4,
     name: "Basic Party Pack",
     items: ["Marinara Spaghetti", "Garden Salad", "Garlic Knots"],
     price: "$6.99",
-    image:
-      "https://images.squarespace-cdn.com/content/v1/642512cfe04e46095ee8a5d1/cfcc2cbf-edd7-4fa1-985f-f1aa22de119e/C582F467-F8D1-4244-9942-71B4C7FEFA2F.jpeg",
+    image: BasicPack,
   },
 ];
 
@@ -95,7 +99,7 @@ function useScrollReveal() {
   return { ref, visible };
 }
 
-// ── Sub-components ───────────────────────────────────────
+// ── Sub-components ────
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-flex items-center gap-2 text-red-600 text-xs font-bold tracking-[0.2em] uppercase mb-4">
@@ -105,13 +109,77 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+// function PackageCard({ pkg, delay }: { pkg: PackageItem; delay: number }) {
+//   const { ref, visible } = useScrollReveal();
+//   const [ordered, setOrdered] = useState(false);
+
+//   const handleOrder = () => {
+//     setOrdered(true);
+//     setTimeout(() => setOrdered(false), 1800);
+//   };
+
+//   return (
+//     <div
+//       ref={ref}
+//       className="transition-all duration-700 ease-out"
+//       style={{
+//         opacity: visible ? 1 : 0,
+//         transform: visible ? "translateY(0)" : "translateY(40px)",
+//         transitionDelay: `${delay}ms`,
+//       }}
+//     >
+//       <Card className="overflow-hidden border-0 rounded-none group hover:-translate-y-2 transition-transform duration-300 shadow-md h-full">
+//         <div className="relative h-52 overflow-hidden">
+//           <img
+//             src={pkg.image}
+//             alt={pkg.name}
+//             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+//           />
+//           {pkg.badge && (
+//             <Badge className="absolute top-3 left-3 bg-red-600 hover:bg-red-700 text-white text-[10px] tracking-widest uppercase rounded-none">
+//               {pkg.badge}
+//             </Badge>
+//           )}
+//         </div>
+
+//         <CardContent className="p-6 flex flex-col flex-1">
+//           <h3 className="font-serif text-xl font-bold text-stone-800 mb-4 leading-tight">{pkg.name}</h3>
+
+//           <ul className="space-y-1 flex-1 mb-5">
+//             {pkg.items.map((item) => (
+//               <li key={item} className="flex items-center gap-2 text-sm text-stone-500 py-1.5 border-b border-stone-100">
+//                 <span className="text-amber-500 text-[10px]">✦</span>
+//                 {item}
+//               </li>
+//             ))}
+//           </ul>
+
+//           <div className="flex items-center justify-between gap-3">
+//             <div>
+//               <span className="font-serif text-2xl font-bold text-stone-800">{pkg.price}</span>
+//               <span className="text-stone-400 text-xs ml-1">/ guest</span>
+//             </div>
+//             <Button
+//               onClick={handleOrder}
+//               className={`rounded-none text-[11px] tracking-widest uppercase transition-all duration-200 ${
+//                 ordered ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
+//               }`}
+//             >
+//               {ordered ? "✓ Added!" : "Order Now"}
+//             </Button>
+//           </div>
+//         </CardContent>
+//       </Card>
+//     </div>
+//   );
+// }
+
+// ── Main Page ─────────
 function PackageCard({ pkg, delay }: { pkg: PackageItem; delay: number }) {
   const { ref, visible } = useScrollReveal();
-  const [ordered, setOrdered] = useState(false);
 
   const handleOrder = () => {
-    setOrdered(true);
-    setTimeout(() => setOrdered(false), 1800);
+    window.location.href = `/catering/order?package=${pkg.id}`;
   };
 
   return (
@@ -139,11 +207,16 @@ function PackageCard({ pkg, delay }: { pkg: PackageItem; delay: number }) {
         </div>
 
         <CardContent className="p-6 flex flex-col flex-1">
-          <h3 className="font-serif text-xl font-bold text-stone-800 mb-4 leading-tight">{pkg.name}</h3>
+          <h3 className="font-serif text-xl font-bold text-stone-800 mb-4 leading-tight">
+            {pkg.name}
+          </h3>
 
           <ul className="space-y-1 flex-1 mb-5">
             {pkg.items.map((item) => (
-              <li key={item} className="flex items-center gap-2 text-sm text-stone-500 py-1.5 border-b border-stone-100">
+              <li
+                key={item}
+                className="flex items-center gap-2 text-sm text-stone-500 py-1.5 border-b border-stone-100"
+              >
                 <span className="text-amber-500 text-[10px]">✦</span>
                 {item}
               </li>
@@ -152,16 +225,23 @@ function PackageCard({ pkg, delay }: { pkg: PackageItem; delay: number }) {
 
           <div className="flex items-center justify-between gap-3">
             <div>
-              <span className="font-serif text-2xl font-bold text-stone-800">{pkg.price}</span>
+              <span className="font-serif text-2xl font-bold text-stone-800">
+                {pkg.price}
+              </span>
               <span className="text-stone-400 text-xs ml-1">/ guest</span>
             </div>
+
+            {/* ── Updated Button ── */}
             <Button
               onClick={handleOrder}
-              className={`rounded-none text-[11px] tracking-widest uppercase transition-all duration-200 ${
-                ordered ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
-              }`}
+              className="rounded-none bg-red-600 hover:bg-red-700 text-[11px] tracking-widest uppercase transition-all duration-200 group/btn"
             >
-              {ordered ? "✓ Added!" : "Order Now"}
+              <span className="inline-flex items-center gap-1.5">
+                Order Now
+                <span className="translate-x-0 group-hover/btn:translate-x-1 transition-transform duration-200 inline-block">
+                  →
+                </span>
+              </span>
             </Button>
           </div>
         </CardContent>
@@ -169,8 +249,6 @@ function PackageCard({ pkg, delay }: { pkg: PackageItem; delay: number }) {
     </div>
   );
 }
-
-// ── Main Page ────────────────────────────────────────────
 export default function Catering() {
   const introReveal = useScrollReveal();
   const packReveal = useScrollReveal();
@@ -189,7 +267,7 @@ export default function Catering() {
   return (
     <div className="min-h-screen bg-[#FAF6EE] font-sans">
       {/* ── NAV ── */}
-      <nav className="fixed top-0 w-full z-50 bg-stone-900/95 backdrop-blur-sm border-b border-amber-600/20 flex items-center justify-between px-[5%] h-16">
+      {/* <nav className="fixed top-0 w-full z-50 bg-stone-900/95 backdrop-blur-sm border-b border-amber-600/20 flex items-center justify-between px-[5%] h-16">
         <span className="font-serif italic font-bold text-lg text-white">
           "<span className="text-amber-500">Your</span>" Pizza Shop
           <span className="text-white/40 text-sm font-normal not-italic ml-2">· Largo</span>
@@ -208,7 +286,7 @@ export default function Catering() {
             </li>
           ))}
         </ul>
-      </nav>
+      </nav> */}
 
       {/* ── HERO ── */}
       <section
@@ -216,11 +294,13 @@ export default function Catering() {
         style={{ paddingTop: "64px" }}
       >
         <div
-          className="absolute inset-0 animate-[zoomBg_18s_ease-in-out_infinite_alternate]"
-          style={{
-            background:
-              "linear-gradient(155deg, rgba(26,23,20,0.9) 0%, rgba(192,25,14,0.45) 100%), url('https://images.squarespace-cdn.com/content/v1/642512cfe04e46095ee8a5d1/3b7edb62-3e61-408c-b008-5dac681fec0c/3A8F04BA-1A94-4EC3-8C11-069CEC4CF369.jpeg') center/cover no-repeat",
-          }}
+            className="absolute inset-0 animate-[zoomBg_18s_ease-in-out_infinite_alternate]"
+            style={{
+                backgroundImage: `linear-gradient(155deg, rgba(26,23,20,0.9), rgba(192,25,14,0.45)), url(${heroBg})`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+            }}
         />
         <div className="relative text-center px-6 animate-[fadeUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both]">
           <div className="inline-flex items-center gap-3 text-amber-400 text-[11px] font-bold tracking-[0.2em] uppercase mb-5">
@@ -287,9 +367,9 @@ export default function Catering() {
           {/* Gallery */}
           <div className="hidden md:grid grid-cols-2 grid-rows-2 gap-2 h-[440px]">
             {[
-              { src: "https://images.squarespace-cdn.com/content/v1/642512cfe04e46095ee8a5d1/4b7829c0-c735-464c-8c63-6e7d4a3e1a04/birthday+party.jpeg", span: "col-span-2" },
-              { src: "https://images.squarespace-cdn.com/content/v1/642512cfe04e46095ee8a5d1/77f64d53-cc55-456c-abd1-45609c402cce/9866D503-9AC2-41AF-89C8-2216EE89F11E.jpeg", span: "" },
-              { src: "https://images.squarespace-cdn.com/content/v1/642512cfe04e46095ee8a5d1/025eb941-d3a4-47cd-975b-5edac62824ac/boxesoffoodforparty.jpeg", span: "" },
+              { src: Cat1, span: "col-span-2" },
+              { src: Cat2, span: "" },
+              { src: Cat3, span: "" },
             ].map((img) => (
               <div key={img.src} className={`overflow-hidden ${img.span}`}>
                 <img src={img.src} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
@@ -389,7 +469,7 @@ export default function Catering() {
       </section>
 
       {/* ── NEWSLETTER ── */}
-      <section className="py-16 px-[5%] bg-stone-900 text-center">
+      {/* <section className="py-16 px-[5%] bg-stone-900 text-center">
         <h3 className="font-serif text-2xl font-bold text-white mb-2">Stay in the loop</h3>
         <p className="text-white/45 text-sm mb-7">Sign up to receive news and updates.</p>
         {subscribed ? (
@@ -411,10 +491,10 @@ export default function Catering() {
             </Button>
           </div>
         )}
-      </section>
+      </section> */}
 
       {/* ── FOOTER ── */}
-      <footer className="bg-stone-950 px-[5%] pt-14 pb-8">
+      {/* <footer className="bg-stone-950 px-[5%] pt-14 pb-8">
         <div className="grid md:grid-cols-3 gap-12 mb-10">
           <div>
             <span className="font-serif italic font-bold text-lg text-white block mb-3">
@@ -460,7 +540,7 @@ export default function Catering() {
             ))}
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }
