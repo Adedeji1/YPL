@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router';
 import { motion } from 'motion/react';
-import { ShoppingCart, Menu, Utensils, User, Sun, Moon } from 'lucide-react';
+import { ShoppingCart, Menu, Utensils, User, Sun, Moon, MessageCircle, Info, Contact } from 'lucide-react';
 import { useCart } from '../cart-context';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
@@ -42,7 +42,7 @@ export function Navigation() {
                 Home
               </Link>
               <Link
-                to="/menu"
+                to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"}
                 className={`hover:text-[#D32F2F] transition-colors ${
                   isActive('/menu') ? 'text-[#D32F2F]' : 'text-foreground'
                 }`}
@@ -50,13 +50,29 @@ export function Navigation() {
                 Menu
               </Link>
               <Link
+                to="/about"
+                className={`hover:text-[#D32F2F] transition-colors ${
+                  isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'
+                }`}
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                className={`hover:text-[#D32F2F] transition-colors ${
+                  isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'
+                }`}
+              >
+                Contact
+              </Link>
+              {/* <Link
                 to="/builder"
                 className={`hover:text-[#D32F2F] transition-colors ${
                   isActive('/builder') ? 'text-[#D32F2F]' : 'text-foreground'
                 }`}
               >
                 Build Your Pizza
-              </Link>
+              </Link> */}
 
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -70,7 +86,7 @@ export function Navigation() {
                 )}
               </button>
 
-              <Link to="/checkout" className="relative">
+              {/* <Link to="/checkout" className="relative">
                 <motion.div
                   animate={animate ? { scale: [1, 1.2, 1] } : {}}
                   transition={{ duration: 0.3 }}
@@ -86,7 +102,7 @@ export function Navigation() {
                     </motion.span>
                   )}
                 </motion.div>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -95,17 +111,23 @@ export function Navigation() {
       {/* Mobile Bottom Navigation */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border">
         <div className="flex items-center justify-around py-3">
-          <Link to="/menu" className="flex flex-col items-center gap-1">
+          <Link to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"} className="flex flex-col items-center gap-1">
             <Menu className={`w-6 h-6 ${isActive('/menu') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
             <span className={`text-xs ${isActive('/menu') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
               Menu
             </span>
           </Link>
 
-          <Link to="/builder" className="flex flex-col items-center gap-1">
+          {/* <Link to="/builder" className="flex flex-col items-center gap-1">
             <Utensils className={`w-6 h-6 ${isActive('/builder') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
             <span className={`text-xs ${isActive('/builder') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
               Build
+            </span>
+          </Link> */}
+          <Link to="/about" className="flex flex-col items-center gap-1">
+            <Info className={`w-6 h-6 ${isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
+            <span className={`text-xs ${isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
+              About
             </span>
           </Link>
 
@@ -115,7 +137,7 @@ export function Navigation() {
             </div>
           </Link>
 
-          <Link to="/checkout" className="flex flex-col items-center gap-1 relative">
+          {/* <Link to="/checkout" className="flex flex-col items-center gap-1 relative">
             <motion.div
               animate={animate ? { scale: [1, 1.3, 1] } : {}}
               transition={{ duration: 0.3 }}
@@ -129,6 +151,12 @@ export function Navigation() {
             </motion.div>
             <span className={`text-xs ${isActive('/checkout') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
               Cart
+            </span>
+          </Link> */}
+          <Link to="/contact" className="flex flex-col items-center gap-1">
+            <Contact className={`w-6 h-6 ${isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
+            <span className={`text-xs ${isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
+              Contact
             </span>
           </Link>
 

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Check, Plus, Minus, ArrowRight, ArrowLeft } from 'lucide-react';
 import { toppingCategories, pizzaSizes, sauceOptions, cheeseOptions } from '../data';
 import { useCart } from '../cart-context';
 import { useNavigate } from 'react-router';
+import useIsLargeScreen from '../../../hooks/screenSize';
 
 interface PizzaConfig {
   size: 'small' | 'medium' | 'large' | null;
@@ -23,6 +24,12 @@ export function PizzaBuilder() {
   const [showUpsell, setShowUpsell] = useState(false);
   const { addItem } = useCart();
   const navigate = useNavigate();
+  // Render Annimations based on screen Size
+  const isLargeScreen = useIsLargeScreen();
+
+  // helpers to conditionally apply motion props only on large screens
+  const animProps = (p: Record<string, any>) => (isLargeScreen ? p : {});
+  const hoverProps = (p: any) => (isLargeScreen ? p : undefined);
 
   const calculatePrice = () => {
     let price = 0;
@@ -108,118 +115,148 @@ export function PizzaBuilder() {
   };
 
   return (
-    <div className="min-h-screen py-24 px-6 pb-32 md:pb-12">
+    <div className="min-h-screen py-6 px-6 pb-20 md:pb-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">Build Your Pizza</h1>
-          <p className="text-xl text-muted-foreground">
-            Create your perfect pizza, just the way you like it
-          </p>
-        </motion.div>
-
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        {isLargeScreen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="hidden lg:block top-24 text-center mb-6"
+          >
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">Build Your Pizza</h1>
+            <p className="text-xl text-gray-500">
+              Create your perfect pizza, just the way you like it
+            </p>
+          </motion.div>
+        )}
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
           {/* Pizza Visual */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="sticky top-24"
+            {...animProps({ initial: { opacity: 0, x: -50 }, animate: { opacity: 1, x: 0 } })}
+            className="hidden lg:block sticky top-12 h-fit"
           >
-            <div className="bg-card rounded-3xl p-8 shadow-2xl">
-              <h2 className="text-2xl font-bold mb-6">Your Pizza</h2>
+            <div className="bg-card rounded-3xl p-6 shadow-2xl">
+              <h2 className="text-xl font-bold mb-4">Your Pizza</h2>
               
               {/* Pizza Visualization */}
               <div className="relative w-full aspect-square max-w-md mx-auto">
                 {/* Base/Dough */}
                 <motion.div
                   className="absolute inset-0 rounded-full bg-gradient-radial from-[#F5DEB3] to-[#D2B48C] shadow-lg"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: config.size ? 1 : 0.3, opacity: config.size ? 1 : 0.3 }}
-                  transition={{ type: 'spring', damping: 15 }}
+                  {...animProps({
+                    initial: { scale: 0 },
+                    animate: { scale: config.size ? 1 : 0.3, opacity: config.size ? 1 : 0.3 },
+                    transition: { type: 'spring', damping: 15 },
+                  })}
                 />
 
                 {/* Sauce Layer */}
-                <AnimatePresence>
-                  {config.sauce && (
-                    <motion.div
+                {isLargeScreen ? (
+                  <AnimatePresence>
+                    {config.sauce && (
+                      <motion.div
+                        className="absolute inset-8 rounded-full shadow-inner"
+                        style={{
+                          backgroundColor: getSauceColor(config.sauce),
+                          opacity: 0.9,
+                        }}
+                        {...animProps({ initial: { scale: 0, opacity: 0 }, animate: { scale: 1, opacity: 0.9 }, exit: { scale: 0, opacity: 0 }, transition: { type: 'spring', damping: 15 } })}
+                      />
+                    )}
+                  </AnimatePresence>
+                ) : (
+                  config.sauce && (
+                    <div
                       className="absolute inset-8 rounded-full shadow-inner"
                       style={{
                         backgroundColor: getSauceColor(config.sauce),
                         opacity: 0.9,
                       }}
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 0.9 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ type: 'spring', damping: 15 }}
                     />
-                  )}
-                </AnimatePresence>
+                  )
+                )}
 
                 {/* Cheese Layer */}
-                <AnimatePresence>
-                  {config.cheese && config.cheese !== 'none' && (
-                    <motion.div
+                {isLargeScreen ? (
+                  <AnimatePresence>
+                    {config.cheese && config.cheese !== 'none' && (
+                      <motion.div
+                        className="absolute inset-12 rounded-full"
+                        style={{
+                          background: 'radial-gradient(circle, #FFF9E6 0%, #FFE5B4 100%)',
+                          opacity: 0.85,
+                        }}
+                        {...animProps({ initial: { scale: 0, opacity: 0 }, animate: { scale: 1, opacity: 0.85 }, exit: { scale: 0, opacity: 0 }, transition: { type: 'spring', damping: 15, delay: 0.1 } })}
+                      />
+                    )}
+                  </AnimatePresence>
+                ) : (
+                  config.cheese && config.cheese !== 'none' && (
+                    <div
                       className="absolute inset-12 rounded-full"
                       style={{
                         background: 'radial-gradient(circle, #FFF9E6 0%, #FFE5B4 100%)',
                         opacity: 0.85,
                       }}
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 0.85 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ type: 'spring', damping: 15, delay: 0.1 }}
                     />
-                  )}
-                </AnimatePresence>
+                  )
+                )}
 
                 {/* Toppings */}
-                <AnimatePresence mode="popLayout">
-                  {config.toppings.map((topping, index) => {
+                {isLargeScreen ? (
+                  <AnimatePresence mode="popLayout">
+                    {config.toppings.map((topping, index) => {
+                      const angle = (index * (360 / Math.max(config.toppings.length, 1))) * (Math.PI / 180);
+                      const radius = 80;
+                      const x = Math.cos(angle) * radius;
+                      const y = Math.sin(angle) * radius;
+
+                      return (
+                        <motion.div
+                          key={topping}
+                          className="absolute w-12 h-12 rounded-full bg-[#D32F2F] shadow-md border-2 border-white flex items-center justify-center text-white text-xs font-bold"
+                          {...animProps({ initial: { scale: 0, x: 0, y: -100, opacity: 0 }, animate: { scale: 1, x, y, opacity: 1 }, exit: { scale: 0, opacity: 0 }, transition: { type: 'spring', damping: 12, stiffness: 200, delay: index * 0.05 } })}
+                          style={{
+                            left: '50%',
+                            top: '50%',
+                            marginLeft: '-24px',
+                            marginTop: '-24px',
+                          }}
+                        >
+                          🍕
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
+                ) : (
+                  config.toppings.map((topping, index) => {
                     const angle = (index * (360 / Math.max(config.toppings.length, 1))) * (Math.PI / 180);
                     const radius = 80;
                     const x = Math.cos(angle) * radius;
                     const y = Math.sin(angle) * radius;
-
                     return (
-                      <motion.div
+                      <div
                         key={topping}
                         className="absolute w-12 h-12 rounded-full bg-[#D32F2F] shadow-md border-2 border-white flex items-center justify-center text-white text-xs font-bold"
-                        initial={{ scale: 0, x: 0, y: -100, opacity: 0 }}
-                        animate={{
-                          scale: 1,
-                          x,
-                          y,
-                          opacity: 1,
-                        }}
-                        exit={{ scale: 0, opacity: 0 }}
-                        transition={{
-                          type: 'spring',
-                          damping: 12,
-                          stiffness: 200,
-                          delay: index * 0.05,
-                        }}
                         style={{
-                          left: '50%',
-                          top: '50%',
+                          left: `calc(50% + ${x}px)`,
+                          top: `calc(50% + ${y}px)`,
                           marginLeft: '-24px',
                           marginTop: '-24px',
                         }}
                       >
                         🍕
-                      </motion.div>
+                      </div>
                     );
-                  })}
-                </AnimatePresence>
+                  })
+                )}
               </div>
 
               {/* Price Display */}
-              <div className="mt-8 p-6 bg-gradient-to-r from-[#D32F2F] to-[#B71C1C] rounded-2xl text-white text-center">
-                <p className="text-sm opacity-90 mb-1">Total Price</p>
-                <p className="text-4xl font-bold">${calculatePrice().toFixed(2)}</p>
+              <div className="mt-4 p-4 bg-gradient-to-r from-[#D32F2F] to-[#B71C1C] rounded-2xl text-white text-center">
+                <p className="text-xs opacity-90 mb-1">Total Price</p>
+                <p className="text-3xl font-bold">${calculatePrice().toFixed(2)}</p>
               </div>
 
               {/* Order Summary */}
@@ -227,7 +264,7 @@ export function PizzaBuilder() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 space-y-2 text-sm"
+                  className="mt-3 space-y-1 text-xs"
                 >
                   <p><span className="text-muted-foreground">Size:</span> <span className="font-semibold">{config.size}</span></p>
                   {config.sauce && <p><span className="text-muted-foreground">Sauce:</span> <span className="font-semibold">{config.sauce}</span></p>}
@@ -246,7 +283,7 @@ export function PizzaBuilder() {
             animate={{ opacity: 1, x: 0 }}
           >
             {/* Progress Steps */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-4">
               {[1, 2, 3, 4].map((s) => (
                 <div key={s} className="flex items-center flex-1">
                   <div
@@ -272,13 +309,11 @@ export function PizzaBuilder() {
               {step === 1 && (
                 <motion.div
                   key="step1"
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  className="space-y-6"
+                  {...animProps({ initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -50 } })}
+                  className="space-y-3"
                 >
-                  <h2 className="text-3xl font-bold">Choose Your Size</h2>
-                  <div className="grid gap-4">
+                  <h2 className="text-2xl font-bold">Choose Your Size</h2>
+                  <div className="grid gap-2">
                     {pizzaSizes.map((size) => (
                       <motion.button
                         key={size.id}
@@ -288,16 +323,16 @@ export function PizzaBuilder() {
                             ? 'border-[#D32F2F] bg-[#D32F2F]/5'
                             : 'border-border hover:border-[#D32F2F]/50'
                         }`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={hoverProps({ scale: 1.02 })}
+                        whileTap={hoverProps({ scale: 0.98 })}
                       >
                         <div className="flex items-center justify-between">
                           <div>
-                            <h3 className="text-xl font-bold mb-1">{size.name}</h3>
-                            <p className="text-sm text-muted-foreground">Serves {size.servings} people</p>
+                            <h3 className="text-lg font-bold mb-0.5">{size.name}</h3>
+                            <p className="text-xs text-muted-foreground">Serves {size.servings} people</p>
                           </div>
                           <div className="text-right">
-                            <p className="text-2xl font-bold text-[#D32F2F]">${size.basePrice.toFixed(2)}</p>
+                            <p className="text-xl font-bold text-[#D32F2F]">${size.basePrice.toFixed(2)}</p>
                             {config.size === size.id && (
                               <motion.div
                                 initial={{ scale: 0 }}
@@ -319,24 +354,22 @@ export function PizzaBuilder() {
               {step === 2 && (
                 <motion.div
                   key="step2"
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  className="space-y-6"
+                  {...animProps({ initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -50 } })}
+                  className="space-y-3"
                 >
-                  <h2 className="text-3xl font-bold">Pick Your Sauce</h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
+                  <h2 className="text-2xl font-bold">Pick Your Sauce</h2>
+                  <div className="grid sm:grid-cols-2 gap-2">
                     {sauceOptions.map((sauce) => (
                       <motion.button
                         key={sauce.id}
                         onClick={() => setConfig({ ...config, sauce: sauce.id })}
-                        className={`p-6 rounded-2xl border-2 text-left transition-all ${
+                        className={`p-4 rounded-2xl border-2 text-left transition-all ${
                           config.sauce === sauce.id
                             ? 'border-[#D32F2F] bg-[#D32F2F]/5'
                             : 'border-border hover:border-[#D32F2F]/50'
                         }`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={hoverProps({ scale: 1.02 })}
+                        whileTap={hoverProps({ scale: 0.98 })}
                       >
                         <div className="w-12 h-12 rounded-full mb-3" style={{ backgroundColor: getSauceColor(sauce.id) }} />
                         <h3 className="text-lg font-bold mb-1">{sauce.name}</h3>
@@ -359,24 +392,22 @@ export function PizzaBuilder() {
               {step === 3 && (
                 <motion.div
                   key="step3"
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  className="space-y-6"
+                  {...animProps({ initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -50 } })}
+                  className="space-y-3"
                 >
-                  <h2 className="text-3xl font-bold">Select Your Cheese</h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
+                  <h2 className="text-2xl font-bold">Select Your Cheese</h2>
+                  <div className="grid sm:grid-cols-2 gap-2">
                     {cheeseOptions.map((cheese) => (
                       <motion.button
                         key={cheese.id}
                         onClick={() => setConfig({ ...config, cheese: cheese.id })}
-                        className={`p-6 rounded-2xl border-2 text-left transition-all ${
+                        className={`p-4 rounded-2xl border-2 text-left transition-all ${
                           config.cheese === cheese.id
                             ? 'border-[#D32F2F] bg-[#D32F2F]/5'
                             : 'border-border hover:border-[#D32F2F]/50'
                         }`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={hoverProps({ scale: 1.02 })}
+                        whileTap={hoverProps({ scale: 0.98 })}
                       >
                         <h3 className="text-lg font-bold mb-1">{cheese.name}</h3>
                         {config.cheese === cheese.id && (
@@ -398,20 +429,18 @@ export function PizzaBuilder() {
               {step === 4 && (
                 <motion.div
                   key="step4"
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  className="space-y-8"
+                  {...animProps({ initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -50 } })}
+                  className="space-y-4"
                 >
-                  <h2 className="text-3xl font-bold">Add Toppings</h2>
+                  <h2 className="text-2xl font-bold">Add Toppings</h2>
 
                   {/* Meats */}
                   <div>
-                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
                       <span className="w-2 h-6 bg-[#D32F2F] rounded-full" />
                       Meats
                     </h3>
-                    <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="grid sm:grid-cols-2 gap-2">
                       {toppingCategories.meats.map((topping) => (
                         <ToppingButton
                           key={topping.id}
@@ -425,11 +454,11 @@ export function PizzaBuilder() {
 
                   {/* Veggies */}
                   <div>
-                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
                       <span className="w-2 h-6 bg-[#388E3C] rounded-full" />
                       Vegetables
                     </h3>
-                    <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="grid sm:grid-cols-2 gap-2">
                       {toppingCategories.veggies.map((topping) => (
                         <ToppingButton
                           key={topping.id}
@@ -443,11 +472,11 @@ export function PizzaBuilder() {
 
                   {/* Extra Cheese */}
                   <div>
-                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
                       <span className="w-2 h-6 bg-[#FBC02D] rounded-full" />
                       Extra Cheese
                     </h3>
-                    <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="grid sm:grid-cols-2 gap-2">
                       {toppingCategories.premium.map((topping) => (
                         <ToppingButton
                           key={topping.id}
@@ -463,13 +492,13 @@ export function PizzaBuilder() {
             </AnimatePresence>
 
             {/* Navigation Buttons */}
-            <div className="flex gap-4 mt-8">
+            <div className="flex gap-4 mt-4">
               {step > 1 && (
                 <motion.button
                   onClick={() => setStep(step - 1)}
                   className="flex-1 py-4 bg-card border-2 border-border rounded-full font-bold flex items-center justify-center gap-2"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={hoverProps({ scale: 1.02 })}
+                  whileTap={hoverProps({ scale: 0.98 })}
                 >
                   <ArrowLeft className="w-5 h-5" />
                   Back
@@ -485,8 +514,8 @@ export function PizzaBuilder() {
                       ? 'bg-[#D32F2F] text-white'
                       : 'bg-muted text-muted-foreground cursor-not-allowed'
                   }`}
-                  whileHover={canProceed() ? { scale: 1.02 } : {}}
-                  whileTap={canProceed() ? { scale: 0.98 } : {}}
+                  whileHover={canProceed() ? hoverProps({ scale: 1.02 }) : undefined}
+                  whileTap={canProceed() ? hoverProps({ scale: 0.98 }) : undefined}
                 >
                   Next
                   <ArrowRight className="w-5 h-5" />
@@ -495,8 +524,8 @@ export function PizzaBuilder() {
                 <motion.button
                   onClick={handleAddToCart}
                   className="flex-1 py-4 bg-[#D32F2F] text-white rounded-full font-bold"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={hoverProps({ scale: 1.02 })}
+                  whileTap={hoverProps({ scale: 0.98 })}
                 >
                   Add to Cart - ${calculatePrice().toFixed(2)}
                 </motion.button>
@@ -510,15 +539,11 @@ export function PizzaBuilder() {
       <AnimatePresence>
         {showUpsell && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            {...animProps({ initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } })}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-6"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 50 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 50 }}
+              {...animProps({ initial: { scale: 0.9, y: 50 }, animate: { scale: 1, y: 0 }, exit: { scale: 0.9, y: 50 } })}
               className="bg-card rounded-3xl p-8 max-w-lg w-full shadow-2xl"
             >
               <h2 className="text-3xl font-bold mb-4">Make it a Combo?</h2>
@@ -534,7 +559,7 @@ export function PizzaBuilder() {
                     handleFinish();
                   }}
                   className="w-full p-4 bg-background rounded-xl text-left hover:bg-accent transition-colors"
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={hoverProps({ scale: 1.02 })}
                 >
                   <p className="font-bold">+ Greek Salad</p>
                   <p className="text-sm text-muted-foreground">Add $7.99</p>
@@ -547,7 +572,7 @@ export function PizzaBuilder() {
                     handleFinish();
                   }}
                   className="w-full p-4 bg-background rounded-xl text-left hover:bg-accent transition-colors"
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={hoverProps({ scale: 1.02 })}
                 >
                   <p className="font-bold">+ Caramel Snickers Cake</p>
                   <p className="text-sm text-muted-foreground">Add $6.99</p>
@@ -557,8 +582,8 @@ export function PizzaBuilder() {
               <motion.button
                 onClick={handleFinish}
                 className="w-full py-4 bg-[#D32F2F] text-white rounded-full font-bold"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={hoverProps({ scale: 1.02 })}
+                whileTap={hoverProps({ scale: 0.98 })}
               >
                 No Thanks, Go to Cart
               </motion.button>
@@ -579,8 +604,8 @@ function ToppingButton({ topping, isSelected, onToggle }: { topping: any; isSele
           ? 'border-[#D32F2F] bg-[#D32F2F]/5'
           : 'border-border hover:border-[#D32F2F]/50'
       }`}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      // whileHover={hoverProps({ scale: 1.02 })}
+      // whileTap={hoverProps({ scale: 0.98 })}
     >
       <div className="flex items-center justify-between">
         <div>

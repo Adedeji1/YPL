@@ -4,7 +4,6 @@ import { ArrowRight, Beer, Pizza, Award, MapPin, Phone, Clock } from 'lucide-rea
 import { useEffect, useState, useRef } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { menuData, testimonials } from '../data';
-import logo from './asset/Pizza-Logo.webp';
 
 export function Home() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -72,7 +71,9 @@ export function Home() {
                 transition={{ delay: 0.3, duration: 0.5 }}
                 className="inline-block"
               >
-                <Link to="/menu">
+                <Link 
+                  to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"}
+                >
                   <motion.button
                     className="group relative px-8 py-4 bg-[#D32F2F] text-white rounded-full overflow-hidden"
                     whileHover={{ scale: 1.05 }}
@@ -115,7 +116,7 @@ export function Home() {
         >
           <h3 className="text-xl font-bold mb-4">Quick Order</h3>
           <div className="space-y-3">
-            <Link to="/menu" className="block p-3 rounded-lg hover:bg-accent transition-colors">
+            <Link to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"} className="block p-3 rounded-lg hover:bg-accent transition-colors">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-lg bg-[#D32F2F]/10 flex items-center justify-center">
                   <Pizza className="w-6 h-6 text-[#D32F2F]" />
@@ -126,7 +127,9 @@ export function Home() {
                 </div>
               </div>
             </Link>
-            <Link to="/builder" className="block p-3 rounded-lg hover:bg-accent transition-colors">
+
+            {/* This is the Build your Pizza link that is being commented out for now */}
+            {/* <Link to="/builder" className="block p-3 rounded-lg hover:bg-accent transition-colors">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-lg bg-[#388E3C]/10 flex items-center justify-center">
                   <Pizza className="w-6 h-6 text-[#388E3C]" />
@@ -136,7 +139,7 @@ export function Home() {
                   <p className="text-sm text-muted-foreground">Customize pizza</p>
                 </div>
               </div>
-            </Link>
+            </Link> */}
           </div>
         </motion.div>
       </section>
@@ -215,7 +218,7 @@ export function Home() {
                   </div>
                 </div>
 
-                <Link to="/menu">
+                <Link to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"}>
                   <motion.button
                     className="w-full md:w-auto px-8 py-4 bg-[#D32F2F] text-white rounded-full"
                     whileHover={{ scale: 1.05 }}
@@ -244,7 +247,7 @@ export function Home() {
             </h2>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <Link to="/menu?category=pizza">
+              <Link to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"}>
                 <motion.div
                   className="relative group overflow-hidden rounded-2xl h-64 cursor-pointer"
                   whileHover={{ scale: 1.05 }}
@@ -263,7 +266,7 @@ export function Home() {
                 </motion.div>
               </Link>
 
-              <Link to="/menu?category=beer">
+              <Link to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"}>
                 <motion.div
                   className="relative group overflow-hidden rounded-2xl h-64 cursor-pointer"
                   whileHover={{ scale: 1.05 }}
@@ -282,7 +285,7 @@ export function Home() {
                 </motion.div>
               </Link>
 
-              <Link to="/menu?category=wings">
+              <Link to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"}>
                 <motion.div
                   className="relative group overflow-hidden rounded-2xl h-64 cursor-pointer"
                   whileHover={{ scale: 1.05 }}
@@ -300,8 +303,8 @@ export function Home() {
                   </div>
                 </motion.div>
               </Link>
-
-              <Link to="/builder">
+                {/* Link to building your own Pizza */}
+              {/* <Link to="/builder">
                 <motion.div
                   className="relative group overflow-hidden rounded-2xl h-64 cursor-pointer"
                   whileHover={{ scale: 1.05 }}
@@ -318,7 +321,7 @@ export function Home() {
                     <p className="text-white/80 text-sm">Create your perfect pizza</p>
                   </div>
                 </motion.div>
-              </Link>
+              </Link> */}
             </div>
           </motion.div>
         </div>
@@ -368,7 +371,7 @@ export function Home() {
       </section>
 
       {/* About Section */}
-      <section className="py-20 px-6 bg-background">
+      {/* <section className="py-20 px-6 bg-background">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -441,7 +444,7 @@ export function Home() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       {/* Badges Section */}
       <section className="py-12 px-6 bg-[#D32F2F] text-white">
