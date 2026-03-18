@@ -9,6 +9,7 @@ import { About } from "./components/about";
 import { Contact } from "./components/contact";
 import Catering from "./components/catering";
 import CateringOrderForm from "./components/cateringForm";
+import CareersPage from "./components/career";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
       { path: "contact", Component: Contact },
       { path: "catering", Component: Catering },
       { path: "catering/order", Component: CateringOrderForm },
+      { path: "career", Component: CareersPage },
     ],
   },
 ]);

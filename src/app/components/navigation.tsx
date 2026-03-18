@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import logo from './asset/Pizza-Logo.webp';
 
 export function Navigation() {
-  const { totalItems, animate } = useCart();
+  // const { totalItems, animate } = useCart();
   const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -68,10 +68,18 @@ export function Navigation() {
                <Link
                 to="/catering"
                 className={`hover:text-[#D32F2F] transition-colors ${
-                  isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'
+                  isActive('/catering') ? 'text-[#D32F2F]' : 'text-foreground'
                 }`}
               >
                 Catering
+              </Link>
+              <Link
+                to="/career"
+                className={`hover:text-[#D32F2F] transition-colors ${
+                  isActive('/career') ? 'text-[#D32F2F]' : 'text-foreground'
+                }`}
+              >
+                Career
               </Link>
               {/* <Link
                 to="/builder"
