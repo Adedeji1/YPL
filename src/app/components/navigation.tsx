@@ -4,7 +4,6 @@ import { ShoppingCart, Menu, Utensils, User, Sun, Moon } from 'lucide-react';
 import { useCart } from '../cart-context';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-// import logo from 'figma:asset/f292385bbd6a4c200894072fb8e16a8b79437f81.png';
 import logo from './asset/Pizza-Logo.webp';
 
 export function Navigation() {
