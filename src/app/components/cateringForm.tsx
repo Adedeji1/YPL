@@ -209,7 +209,7 @@ export default function CateringOrderForm() {
     <div className="min-h-screen bg-[#FAF6EE] font-sans">
 
       {/* Nav */}
-      <nav className="fixed top-0 w-full z-50 bg-stone-900/97 backdrop-blur-sm border-b border-amber-600/20 flex items-center justify-between px-[5%] h-16">
+      {/* <nav className="fixed top-0 w-full z-50 bg-stone-900/97 backdrop-blur-sm border-b border-amber-600/20 flex items-center justify-between px-[5%] h-16">
         <a
           href="/catering"
           className="font-serif italic font-bold text-lg text-white no-underline flex items-center gap-2"
@@ -225,7 +225,7 @@ export default function CateringOrderForm() {
           <Phone className="w-3.5 h-3.5" />
           (727) 581-1101
         </a>
-      </nav>
+      </nav> */}
 
       <div className="pt-16 grid lg:grid-cols-[1fr_380px] min-h-screen">
 
