@@ -1,7 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { motion } from 'motion/react';
-import { ShoppingCart, Menu, Utensils, User, Sun, Moon, MessageCircle, Info, Contact } from 'lucide-react';
-import { useCart } from '../cart-context';
+import { Menu, Sun, Moon, } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import logo from './asset/Pizza-Logo.webp';
