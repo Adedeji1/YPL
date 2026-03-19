@@ -5,6 +5,7 @@ import { useCart } from '../cart-context';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import logo from './asset/Pizza-Logo.webp';
+import { Sheet, SheetTrigger, SheetContent, SheetClose} from './ui/sheet';
 
 export function Navigation() {
   // const { totalItems, animate } = useCart();
@@ -125,68 +126,91 @@ export function Navigation() {
       </nav>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border">
-        <div className="flex items-center justify-around py-3">
-          <Link to={"https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"} className="flex flex-col items-center gap-1">
-            <Menu className={`w-6 h-6 ${isActive('/menu') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
-            <span className={`text-xs ${isActive('/menu') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
-              Menu
-            </span>
+
+      <nav className="md:hidden sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
+        <div className="flex items-center justify-between px-4 py-3">
+          
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <img src={logo} alt="logo" className="w-10 h-10" />
+            <span className="font-bold text-[#D32F2F]">Pizza Shop</span>
           </Link>
 
-          {/* <Link to="/builder" className="flex flex-col items-center gap-1">
-            <Utensils className={`w-6 h-6 ${isActive('/builder') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
-            <span className={`text-xs ${isActive('/builder') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
-              Build
-            </span>
-          </Link> */}
-          <Link to="/about" className="flex flex-col items-center gap-1">
-            <Info className={`w-6 h-6 ${isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
-            <span className={`text-xs ${isActive('/about') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
-              About
-            </span>
-          </Link>
+          {/* RIGHT SIDE (FIXED POSITIONING) */}
+          <div className="flex items-center gap-2">
 
-          <Link to="/" className="flex flex-col items-center gap-1 -mt-8">
-            <div className="w-16 h-16 rounded-full bg-white border-4 border-card flex items-center justify-center shadow-lg">
-              <img src={logo} alt="Your Pizza Shop" className="w-14 h-14 rounded-full" />
-            </div>
-          </Link>
-
-          {/* <Link to="/checkout" className="flex flex-col items-center gap-1 relative">
-            <motion.div
-              animate={animate ? { scale: [1, 1.3, 1] } : {}}
-              transition={{ duration: 0.3 }}
+            {/* Theme Toggle (FIXED POSITION) */}
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 rounded-md hover:bg-accent"
             >
-              <ShoppingCart className={`w-6 h-6 ${isActive('/checkout') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-2 bg-[#D32F2F] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                  {totalItems}
-                </span>
+              {mounted && theme === "dark" ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
               )}
-            </motion.div>
-            <span className={`text-xs ${isActive('/checkout') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
-              Cart
-            </span>
-          </Link> */}
-          <Link to="/contact" className="flex flex-col items-center gap-1">
-            <Contact className={`w-6 h-6 ${isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'}`} />
-            <span className={`text-xs ${isActive('/contact') ? 'text-[#D32F2F]' : 'text-foreground'}`}>
-              Contact
-            </span>
-          </Link>
+            </button>
 
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="flex flex-col items-center gap-1"
-          >
-            {mounted && theme === 'dark' ? (
-              <Sun className="w-6 h-6 text-foreground" />
-            ) : (
-              <Moon className="w-6 h-6 text-foreground" />
-            )}
-            <span className="text-xs text-foreground">Theme</span>
-          </button>
+            {/* Hamburger */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <button className="p-2 rounded-md hover:bg-accent">
+                  <Menu className="w-6 h-6" />
+                </button>
+              </SheetTrigger>
+
+              {/* ✅ TRANSPARENT GLASS BACKGROUND */}
+              <SheetContent
+                side="right"
+                className="w-[280px] p-10 bg-white/10 backdrop-blur-lg border-l border-white/20"
+              >
+                
+                {/* Menu Items */}
+                <div className="flex flex-col gap-6 mt-10">
+
+                  <SheetClose asChild>
+                    <Link to="/" className="text-lg font-medium hover:text-[#D32F2F]">
+                      Home
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link
+                      to="https://order.toasttab.com/online/your-pizza-shop-1200-8th-ave-sw-2nd"
+                      className="text-lg font-medium hover:text-[#D32F2F]"
+                    >
+                      Menu
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link to="/about" className="text-lg font-medium hover:text-[#D32F2F]">
+                      About
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link to="/contact" className="text-lg font-medium hover:text-[#D32F2F]">
+                      Contact
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link to="/catering" className="text-lg font-medium hover:text-[#D32F2F]">
+                      Catering
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link to="/career" className="text-lg font-medium hover:text-[#D32F2F]">
+                      Career
+                    </Link>
+                  </SheetClose>
+
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </nav>
     </>
