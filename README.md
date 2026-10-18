@@ -1,11 +1,24 @@
+# YPL 🍕
 
-  # YPL
+A responsive pizza website developed for a client, focused on presenting the brand and its offerings through a clean, user-friendly interface.
 
-  This is a code bundle for YPL. The original project is available at https://www.figma.com/design/EE8LEdvWemROKsbOROQGZY/YPL.
+## Tech Stack
 
-  ## Running the code
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
 
-  Run `npm i` to install the dependencies.
+## Live Demo
 
-  Run `npm run dev` to start the development server.
-  
+[View Website](https://ypl-fawn.vercel.app/)
+
+## Getting Started
+
+```bash
+git clone https://github.com/Adedeji1/YPL.git
+cd YPL
+npm install
+npm run dev
+```
+
